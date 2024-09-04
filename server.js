@@ -176,6 +176,7 @@ app.use((err, req, res, next) => {
 // Initialize the database
 setup().then(() => console.log('Database setup complete'));
 
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

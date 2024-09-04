@@ -4,9 +4,7 @@ const { faker } = require('@faker-js/faker');
 
 
 
-const sessionId = process.argv[2]; // Get the session ID from the command line arguments
-
-console.log(`${sessionId} - this is session id in test case`);
+const sessionId = process.argv[2]; 
 
 function generatePassword(minLength = 8, maxLength = 100) {
   const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
@@ -58,7 +56,7 @@ async function getTempEmail() {
 
 async function getMessageId(email, domain) {
   try {
-    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=getMessages&login=${email}&domain=${domain}`);
+    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=getMessages&login=${email}&domain=${'rteet.com'}`);
     if (response.data.length === 0) {
       throw new Error('No messages found.');
     }
@@ -71,7 +69,7 @@ async function getMessageId(email, domain) {
 
 async function getEmailContent(email, domain, messageId) {
   try {
-    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=readMessage&login=${email}&domain=${domain}&id=${messageId}`);
+    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=readMessage&login=${email}&domain=${'rteet.com'}&id=${messageId}`);
 
     if (!response.data || !response.data.htmlBody) {
       throw new Error('No content found.');
@@ -121,7 +119,7 @@ async function runRegistrationTest() {
     let { email, domain } = await getTempEmail();
 
     await sendLog(`Generated Password: ${randomPassword}`, sessionId);
-    await sendLog(`Temporary Email: ${email}@${domain}`, sessionId);
+    await sendLog(`Temporary Email: ${email}@${'rteet.com'}`, sessionId);
 
     await driver.get('https://cihtwebqa.procloud.org.uk/register/basic');
 
@@ -145,8 +143,8 @@ async function runRegistrationTest() {
 
     await driver.findElement(By.id('Firstname')).sendKeys(randomFirstName);
     await driver.findElement(By.id('Lastname')).sendKeys(randomLastName);
-    await driver.findElement(By.id('Email')).sendKeys(`${email}@${domain}`);
-    await driver.findElement(By.id('ConfirmEmail')).sendKeys(`${email}@${domain}`);
+    await driver.findElement(By.id('Email')).sendKeys(`${email}@${'rteet.com'}`);
+    await driver.findElement(By.id('ConfirmEmail')).sendKeys(`${email}@${'rteet.com'}`);
     await driver.findElement(By.id('Password')).sendKeys(randomPassword);
     await driver.findElement(By.id('ConfirmPassword')).sendKeys(randomPassword);
 
@@ -167,14 +165,14 @@ async function runRegistrationTest() {
 
     await driver.findElement(By.name('actionButton')).click();
 
-    let messageId = await getMessageId(email, domain);
+    let messageId = await getMessageId(email, 'rteet.com');
     let confirmationLink = await getEmailContent(email, domain, messageId);
 
     await driver.get(confirmationLink);
 
     await sendLog(`Confirmation link opened successfully`, sessionId);
 
-    await driver.findElement(By.id('Username')).sendKeys(`${email}@${domain}`);
+    await driver.findElement(By.id('Username')).sendKeys(`${email}@${'rteet.com'}`);
     await driver.findElement(By.id('Password')).sendKeys(randomPassword);
 
     let button = await driver.findElement(By.css('.btn'));
@@ -211,17 +209,4 @@ async function runRegistrationTest() {
 runRegistrationTest().catch(async (error) => {
   await sendLog(`Test failed: ${error.message}`, sessionId);
 });
-
-function fetchSessionId() {
-  fetch('/session-id')
-    .then(response => response.json())
-    .then(data => {
-      sessionStorage.setItem('sessionId', data.sessionId); // Store session ID in sessionStorage
-      console.log('Session ID:', data.sessionId);
-    })
-    .catch(error => {
-      console.error('Error fetching session ID:', error);
-    });
-}
-
 

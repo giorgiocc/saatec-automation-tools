@@ -44,8 +44,14 @@ router.get('/others', isAuthenticated, addUserData, (req, res) => {
 });
 
 router.get('/ciht', isAuthenticated, addUserData, (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'ciht.html'));
+  res.sendFile(path.join(__dirname, 'views','ciht' ,'ciht.html'));
 });
+
+router.get('/registration_ciht', isAuthenticated, addUserData, (req, res) => {
+  const filePath = path.join(__dirname, 'views', 'ciht', 'registration_ciht.html');
+});
+
+
 router.get('/api/user', isAuthenticated, (req, res) => {
     res.json({ username: req.session.username });
 });

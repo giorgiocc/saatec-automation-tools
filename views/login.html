@@ -26,6 +26,7 @@
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        <div id="login-message" class="login-message"></div>
     </div>
     <script>
         document.getElementById('login-form').onsubmit = async (e) => {
@@ -39,14 +40,18 @@
                 body: JSON.stringify({ username, password })
             });
 
+            const messageDiv = document.getElementById('login-message');
             if (response.ok) {
-                alert('Login successful');
-                window.location.href = '/';
+                messageDiv.textContent = 'Login successful';
+                messageDiv.style.color = 'green';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000); // Redirect after 1.5 seconds
             } else {
-                alert('Login failed');
+                messageDiv.textContent = 'Login failed. Please try again.';
+                messageDiv.style.color = 'red';
             }
         };
     </script>
-    
 </body>
 </html>

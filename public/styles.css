@@ -285,3 +285,15 @@ button:hover {
 #logout-btn:hover {
     background-color: #c82333;
 }
+/* Add this to your styles.css */
+.login-message {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+/* Add this to your styles.css */
+.register-message {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}

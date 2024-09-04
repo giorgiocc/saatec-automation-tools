@@ -19,14 +19,13 @@
         <a id="logout-btn" href="/logout">Logout</a>
     </div>
     <div class="container">
-        <h1>CIHT Registration test</h1>
-        <div class="buttons">
-            <button onclick="startTest()">Start Test</button>
-            <button onclick="clearLogs()">Clear Logs</button>
-        </div>
-        <div id="log-container"></div>
+        <h1>CIHT - Automation Tools</h1>
+        <ul class="project-list">
+            <li><a href="/registration_ciht">Registration</a></li>
+            <li><a href="">Login</a></li>
+            <li><a href="">Joinings</a></li>
+        </ul>
     </div>
-    <script src="/ciht.js"></script>
     <script>
         // Fetch the user's email and update the span
         document.addEventListener('DOMContentLoaded', () => {
@@ -37,8 +36,6 @@
                 })
                 .catch(error => console.error('Error fetching user data:', error));
         });
-
-        
     </script>
 </body>
 </html>

@@ -27,6 +27,7 @@ app.use(session({
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 
 // Middleware to assign a session ID if not present
 app.use((req, res, next) => {

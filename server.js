@@ -2,7 +2,7 @@ const express = require('express');
 const { spawn } = require('child_process');
 const path = require('path');
 const cors = require('cors');
-const routers = require('./routers'); // Import routers.js
+const routers = require('./routers');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const { openDb } = require('./db');
@@ -18,7 +18,8 @@ let seleniumProcess = null;
 app.use(session({
   secret: 'your-secret-key', // Replace with a secure key
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
 }));
 
 app.use(cors());
@@ -34,7 +35,7 @@ app.post('/register', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const db = await openDb();
-  
+
   try {
     await db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
     res.status(201).send('User registered');
@@ -58,6 +59,7 @@ app.post('/login', async (req, res) => {
   }
 
   req.session.userId = user.id;
+  req.session.username = user.username;
   res.send('Logged in');
 });
 
@@ -65,7 +67,7 @@ app.post('/login', async (req, res) => {
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).send('Error logging out');
-    res.send('Logged out');
+    res.redirect('/login');
   });
 });
 

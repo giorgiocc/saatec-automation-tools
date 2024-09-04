@@ -9,10 +9,14 @@
 </head>
 <body>
     <div class="top-bar">
+        <div class="user-info">
+            <span id="user-email"></span>
+        </div>
         <a href="/">Home</a>
         <a href="/projects">Projects</a>
         <a href="/management">Management</a>
         <a href="/others">Others</a>
+        <a id="logout-btn" href="/logout">Logout</a>
     </div>
     <div class="container">
         <h1>CIHT Registration test</h1>
@@ -23,5 +27,16 @@
         <div id="log-container"></div>
     </div>
     <script src="/ciht.js"></script>
+    <script>
+        // Fetch the user's email and update the span
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/user')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('user-email').textContent = data.username;
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        });
+    </script>
 </body>
 </html>

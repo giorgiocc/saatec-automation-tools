@@ -10,7 +10,7 @@
 <body>
     <div class="top-bar">
         <div class="user-info">
-            <span id="user-email"></span>
+            <span id="user-email">Loading...</span>
         </div>
         <a href="/">Home</a>
         <a href="/projects">Projects</a>
@@ -40,7 +40,10 @@
                 .then(data => {
                     document.getElementById('user-email').textContent = data.username;
                 })
-                .catch(error => console.error('Error fetching user data:', error));
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById('user-email').textContent = 'Not logged in';
+                });
         });
     </script>
 </body>

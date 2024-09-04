@@ -139,3 +139,6 @@ setup().then(() => console.log('Database setup complete'));
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+
+

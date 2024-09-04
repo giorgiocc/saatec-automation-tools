@@ -3,6 +3,11 @@ const axios = require('axios');
 const { faker } = require('@faker-js/faker');
 
 
+
+const sessionId = process.argv[2]; // Get the session ID from the command line arguments
+
+console.log(`${sessionId} - this is session id in test case`);
+
 function generatePassword(minLength = 8, maxLength = 100) {
   const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
   const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -26,13 +31,18 @@ function generatePassword(minLength = 8, maxLength = 100) {
   return password.sort(() => Math.random() - 0.5).join('');
 }
 
-async function sendLog(message) {
+async function sendLog(message, sessionId) {
   try {
-    await axios.post('http://localhost:3001/logs', { message });
+    if (!message || !sessionId) {
+      throw new Error('Log message and session ID required');
+    }
+
+    await axios.post('http://localhost:3001/logs', { message, sessionId });
   } catch (error) {
     console.error('Error sending log:', error.response ? error.response.data : error.message);
   }
 }
+
 
 async function getTempEmail() {
   try {
@@ -41,7 +51,7 @@ async function getTempEmail() {
     const [email, domain] = emailWithDomain.split('@');
     return { email, domain };
   } catch (error) {
-    await sendLog(`Error fetching temporary email: ${error}`);
+    await sendLog(`Error fetching temporary email: ${error}`, sessionId);
     throw error;
   }
 }
@@ -54,7 +64,7 @@ async function getMessageId(email, domain) {
     }
     return response.data[0].id;
   } catch (error) {
-    await sendLog(`Error fetching message ID: ${error}`);
+    await sendLog(`Error fetching message ID: ${error}`, sessionId);
     throw error;
   }
 }
@@ -76,7 +86,7 @@ async function getEmailContent(email, domain, messageId) {
       throw new Error('No confirmation link found.');
     }
   } catch (error) {
-    await sendLog(`Error fetching email content: ${error}`);
+    await sendLog(`Error fetching email content: ${error}`, sessionId);
     throw error;
   }
 }
@@ -86,7 +96,7 @@ async function getRandomPostcode() {
     const response = await axios.get('https://api.postcodes.io/random/postcodes');
     return response.data.result.postcode;
   } catch (error) {
-    await sendLog(`Error fetching postcode: ${error}`);
+    await sendLog(`Error fetching postcode: ${error}`, sessionId);
     throw error;
   }
 }
@@ -94,7 +104,7 @@ async function waitForPostcodeInput(driver) {
   try {
     await driver.wait(until.elementLocated(By.id('Postcode')), 15000);
   } catch (error) {
-    await sendLog(`Error locating postcode input: ${error}`);
+    await sendLog(`Error locating postcode input: ${error}`, sessionId);
     throw error;
   }
 }
@@ -110,8 +120,8 @@ async function runRegistrationTest() {
     let randomPassword = generatePassword();
     let { email, domain } = await getTempEmail();
 
-    await sendLog(`Generated Password: ${randomPassword}`);
-    await sendLog(`Temporary Email: ${email}@${domain}`);
+    await sendLog(`Generated Password: ${randomPassword}`, sessionId);
+    await sendLog(`Temporary Email: ${email}@${domain}`, sessionId);
 
     await driver.get('https://cihtwebqa.procloud.org.uk/register/basic');
 
@@ -123,7 +133,7 @@ async function runRegistrationTest() {
       let popupCloseButton = await driver.findElement(By.css('.eupopup-closebutton'));
       await popupCloseButton.click();
     } catch (err) {
-      await sendLog('Cookies popup not found or already closed.');
+      await sendLog('Cookies popup not found or already closed.', sessionId);
     }
 
     let titleDropdown = await driver.findElement(By.id('Title'));
@@ -140,11 +150,14 @@ async function runRegistrationTest() {
     await driver.findElement(By.id('Password')).sendKeys(randomPassword);
     await driver.findElement(By.id('ConfirmPassword')).sendKeys(randomPassword);
 
+
+
+
     let passwordStrengthLabel = await driver.findElement(By.css('.password-info > label')).getText();
-    await sendLog(`${passwordStrengthLabel}`);
+    await sendLog(`${passwordStrengthLabel}`, sessionId);
 
     if (!passwordStrengthLabel.includes('100%')) {
-      await sendLog('Error: Password does not meet all the required conditions.');
+      await sendLog('Error: Password does not meet all the required conditions.', sessionId);
     }
     await driver.findElement(By.css('.alphOption:nth-child(3)')).click();
 
@@ -159,7 +172,7 @@ async function runRegistrationTest() {
 
     await driver.get(confirmationLink);
 
-    await sendLog(`Confirmation link opened successfully`);
+    await sendLog(`Confirmation link opened successfully`, sessionId);
 
     await driver.findElement(By.id('Username')).sendKeys(`${email}@${domain}`);
     await driver.findElement(By.id('Password')).sendKeys(randomPassword);
@@ -167,14 +180,14 @@ async function runRegistrationTest() {
     let button = await driver.findElement(By.css('.btn'));
     await driver.executeScript("arguments[0].click();", button);
 
-    await sendLog('Logged in successfully.');
+    await sendLog('Logged in successfully.', sessionId);
 
     await driver.findElement(By.css('.btn-primary:nth-child(3)')).click();
 
     await waitForPostcodeInput(driver);
 
     let postcode = await getRandomPostcode();
-    await sendLog(`Generated Postcode: ${postcode}`);
+    await sendLog(`Generated Postcode: ${postcode}`, sessionId);
 
     await driver.findElement(By.id('Postcode')).sendKeys(postcode);
     await driver.findElement(By.css('.search-postcode')).click();
@@ -190,10 +203,25 @@ async function runRegistrationTest() {
   } catch (err) {
     console.error('Error during form submission:', err);
   } finally {
-    await sendLog('Test completed');
+    await sendLog('Test completed', sessionId);
   }
 }
 
+
 runRegistrationTest().catch(async (error) => {
-  await sendLog(`Test failed: ${error.message}`);
+  await sendLog(`Test failed: ${error.message}`, sessionId);
 });
+
+function fetchSessionId() {
+  fetch('/session-id')
+    .then(response => response.json())
+    .then(data => {
+      sessionStorage.setItem('sessionId', data.sessionId); // Store session ID in sessionStorage
+      console.log('Session ID:', data.sessionId);
+    })
+    .catch(error => {
+      console.error('Error fetching session ID:', error);
+    });
+}
+
+

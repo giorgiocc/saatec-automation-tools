@@ -5,13 +5,15 @@ const cors = require('cors');
 const routers = require('./routers');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-const { openDb } = require('./db');
+const { openDb, setup } = require('./db');
+const { v4: uuidv4 } = require('uuid');
+
+let sessionLogs = {}; // Use an object to store logs per session
 
 // Create the Express app
 const app = express();
 const port = process.env.PORT || 3001;
 
-let logs = [];
 let seleniumProcess = null;
 
 // Middleware setup
@@ -26,7 +28,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Register Route
+// Middleware to assign a session ID if not present
+app.use((req, res, next) => {
+  if (!req.session.sessionId) {
+    req.session.sessionId = uuidv4(); // Generate a unique session ID
+  }
+  next();
+});
+
+// User registration route
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -44,7 +54,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Login Route
+// User login route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -63,7 +73,7 @@ app.post('/login', async (req, res) => {
   res.send('Logged in');
 });
 
-// Logout Route
+// Logout route
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).send('Error logging out');
@@ -74,28 +84,47 @@ app.get('/logout', (req, res) => {
 // Use the routers for handling routes
 app.use('/', routers);
 
+// Log saving route
 app.post('/logs', (req, res) => {
-  const { message } = req.body;
-  if (message) {
-    logs.push({ type: 'info', message });
-    res.status(200).send('Log received');
-  } else {
-    res.status(400).send('No log message provided');
+  const { message, sessionId } = req.body;
+  if (!message || !sessionId) {
+    return res.status(400).send('Log message and session ID required');
   }
+
+  if (!sessionLogs[sessionId]) {
+    sessionLogs[sessionId] = [];
+  }
+
+  sessionLogs[sessionId].push({ type: 'info', message });
+  res.status(200).send('Log received');
 });
 
+// Fetch logs route
 app.get('/logs', (req, res) => {
+  const sessionId = req.query.sessionId;
+  if (!sessionId) {
+    return res.status(400).json({ error: 'Session ID required' });
+  }
+
+  const logs = sessionLogs[sessionId] || [];
   res.json({ logs });
 });
 
+// Clear logs route
 app.get('/clear-logs', (req, res) => {
-  logs = [];
+  const { sessionId } = req.query;
+  if (sessionId && sessionLogs[sessionId]) {
+    sessionLogs[sessionId] = [];
+  }
   res.send('Logs cleared');
 });
 
+// Start Selenium test route
 app.get('/start', (req, res) => {
   if (!seleniumProcess) {
-    seleniumProcess = spawn('node', [path.join(__dirname, 'selenium', 'projects', 'ciht', 'ciht-registration.js')]);
+    const sessionId = req.session.sessionId; // Get the session ID
+
+    seleniumProcess = spawn('node', [path.join(__dirname, 'selenium', 'projects', 'ciht', 'ciht-registration.js'), sessionId]);
 
     seleniumProcess.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
@@ -106,8 +135,14 @@ app.get('/start', (req, res) => {
     });
 
     seleniumProcess.on('close', (code) => {
-      console.log(`process exited with: ${code}`);
+      console.log(`process exited with code: ${code}`);
       seleniumProcess = null;
+    });
+
+    seleniumProcess.on('error', (err) => {
+      console.error(`Error starting Selenium process: ${err.message}`);
+      seleniumProcess = null;
+      res.status(500).send('Error starting Selenium test');
     });
 
     res.send('Test started');
@@ -116,6 +151,12 @@ app.get('/start', (req, res) => {
   }
 });
 
+// Fetch session ID route
+app.get('/session-id', (req, res) => {
+  res.json({ sessionId: req.session.sessionId });
+});
+
+// Restart Selenium test route
 app.get('/restart', (req, res) => {
   if (seleniumProcess) {
     seleniumProcess.kill();
@@ -126,19 +167,16 @@ app.get('/restart', (req, res) => {
   }
 });
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
 
-// Initialize database
-const { setup } = require('./db');
+// Initialize the database
 setup().then(() => console.log('Database setup complete'));
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
-
-

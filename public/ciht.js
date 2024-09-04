@@ -1,5 +1,25 @@
+let sessionId = null;
+
+// Fetch session ID when the page loads
+function fetchSessionId() {
+    fetch('/session-id')
+        .then(response => response.json())
+        .then(data => {
+            sessionId = data.sessionId;
+            console.log('Session ID :', sessionId);
+            // Start fetching logs after sessionId is fetched
+            fetchLogs();
+            setInterval(fetchLogs, 1000); // Start log fetching interval
+        })
+        .catch(error => {
+            console.error('Error fetching session ID:', error);
+        });
+}
+
 function fetchLogs() {
-    fetch('/logs')
+    if (!sessionId) return;
+
+    fetch(`/logs?sessionId=${sessionId}`)
         .then(response => response.json())
         .then(data => {
             const logContainer = document.getElementById('log-container');
@@ -23,17 +43,13 @@ function startTest() {
         .catch(error => console.error('Error starting test:', error));
 }
 
-
-function restartTest() {
-    fetch('/restart')
-        .then(() => fetchLogs())
-        .catch(error => console.error('Error restarting test:', error));
-}
-
 function clearLogs() {
-    fetch('/clear-logs')
+    if (!sessionId) return;
+
+    fetch(`/clear-logs?sessionId=${sessionId}`)
         .then(() => fetchLogs())
         .catch(error => console.error('Error clearing logs:', error));
 }
 
-setInterval(fetchLogs, 1000);
+// Fetch session ID on page load
+document.addEventListener('DOMContentLoaded', fetchSessionId);

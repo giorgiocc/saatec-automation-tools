@@ -2,111 +2,6 @@ const { Builder, By, until } = require('selenium-webdriver');
 const axios = require('axios');
 const { faker } = require('@faker-js/faker');
 
-
-
-const sessionId = process.argv[2]; 
-
-function generatePassword(minLength = 8, maxLength = 100) {
-  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
-  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  const specialChars = '!@#$%^&*_+":?';
-
-  const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-
-  let password = [
-    lowerCase.charAt(Math.floor(Math.random() * lowerCase.length)),
-    upperCase.charAt(Math.floor(Math.random() * upperCase.length)),
-    numbers.charAt(Math.floor(Math.random() * numbers.length)),
-    specialChars.charAt(Math.floor(Math.random() * specialChars.length)),
-  ];
-
-  const allChars = lowerCase + upperCase + numbers + specialChars;
-  for (let i = password.length; i < length; i++) {
-    password.push(allChars.charAt(Math.floor(Math.random() * allChars.length)));
-  }
-
-  return password.sort(() => Math.random() - 0.5).join('');
-}
-
-async function sendLog(message, sessionId) {
-  try {
-    if (!message || !sessionId) {
-      throw new Error('Log message and session ID required');
-    }
-
-    await axios.post('http://localhost:3001/logs', { message, sessionId });
-  } catch (error) {
-    console.error('Error sending log:', error.response ? error.response.data : error.message);
-  }
-}
-
-
-async function getTempEmail() {
-  try {
-    const response = await axios.get('https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1');
-    const emailWithDomain = response.data[0];
-    const [email, domain] = emailWithDomain.split('@');
-    return { email, domain };
-  } catch (error) {
-    await sendLog(`Error fetching temporary email: ${error}`, sessionId);
-    throw error;
-  }
-}
-
-async function getMessageId(email, domain) {
-  try {
-    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=getMessages&login=${email}&domain=${'rteet.com'}`);
-    if (response.data.length === 0) {
-      throw new Error('No messages found.');
-    }
-    return response.data[0].id;
-  } catch (error) {
-    await sendLog(`Error fetching message ID: ${error}`, sessionId);
-    throw error;
-  }
-}
-
-async function getEmailContent(email, domain, messageId) {
-  try {
-    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=readMessage&login=${email}&domain=${'rteet.com'}&id=${messageId}`);
-
-    if (!response.data || !response.data.htmlBody) {
-      throw new Error('No content found.');
-    }
-
-    const messageHtml = response.data.htmlBody;
-
-    const linkMatch = messageHtml.match(/href="([^"]+)"/);
-    if (linkMatch && linkMatch[1]) {
-      return linkMatch[1];
-    } else {
-      throw new Error('No confirmation link found.');
-    }
-  } catch (error) {
-    await sendLog(`Error fetching email content: ${error}`, sessionId);
-    throw error;
-  }
-}
-
-async function getRandomPostcode() {
-  try {
-    const response = await axios.get('https://api.postcodes.io/random/postcodes');
-    return response.data.result.postcode;
-  } catch (error) {
-    await sendLog(`Error fetching postcode: ${error}`, sessionId);
-    throw error;
-  }
-}
-async function waitForPostcodeInput(driver) {
-  try {
-    await driver.wait(until.elementLocated(By.id('Postcode')), 15000);
-  } catch (error) {
-    await sendLog(`Error locating postcode input: ${error}`, sessionId);
-    throw error;
-  }
-}
-
 async function runRegistrationTest() {
   let driver = await new Builder()
     .forBrowser('chrome')
@@ -205,6 +100,108 @@ async function runRegistrationTest() {
   }
 }
 
+const sessionId = process.argv[2]; 
+
+function generatePassword(minLength = 8, maxLength = 100) {
+  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numbers = '0123456789';
+  const specialChars = '!@#$%^&*_+":?';
+
+  const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+
+  let password = [
+    lowerCase.charAt(Math.floor(Math.random() * lowerCase.length)),
+    upperCase.charAt(Math.floor(Math.random() * upperCase.length)),
+    numbers.charAt(Math.floor(Math.random() * numbers.length)),
+    specialChars.charAt(Math.floor(Math.random() * specialChars.length)),
+  ];
+
+  const allChars = lowerCase + upperCase + numbers + specialChars;
+  for (let i = password.length; i < length; i++) {
+    password.push(allChars.charAt(Math.floor(Math.random() * allChars.length)));
+  }
+
+  return password.sort(() => Math.random() - 0.5).join('');
+}
+
+async function sendLog(message, sessionId) {
+  try {
+    if (!message || !sessionId) {
+      throw new Error('Log message and session ID required');
+    }
+
+    await axios.post('http://localhost:3001/logs', { message, sessionId });
+  } catch (error) {
+    console.error('Error sending log:', error.response ? error.response.data : error.message);
+  }
+}
+
+
+async function getTempEmail() {
+  try {
+    const response = await axios.get('https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1');
+    const emailWithDomain = response.data[0];
+    const [email, domain] = emailWithDomain.split('@');
+    return { email, domain };
+  } catch (error) {
+    await sendLog(`Error fetching temporary email: ${error}`, sessionId);
+    throw error;
+  }
+}
+
+async function getMessageId(email, domain) {
+  try {
+    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=getMessages&login=${email}&domain=${'rteet.com'}`);
+    if (response.data.length === 0) {
+      throw new Error('No messages found.');
+    }
+    return response.data[0].id;
+  } catch (error) {
+    await sendLog(`${error}`, sessionId);
+    throw error;
+  }
+}
+
+async function getEmailContent(email, domain, messageId) {
+  try {
+    const response = await axios.get(`https://www.1secmail.com/api/v1/?action=readMessage&login=${email}&domain=${'rteet.com'}&id=${messageId}`);
+
+    if (!response.data || !response.data.htmlBody) {
+      throw new Error('No content found.');
+    }
+
+    const messageHtml = response.data.htmlBody;
+
+    const linkMatch = messageHtml.match(/href="([^"]+)"/);
+    if (linkMatch && linkMatch[1]) {
+      return linkMatch[1];
+    } else {
+      throw new Error('No confirmation link found.');
+    }
+  } catch (error) {
+    await sendLog(`Error fetching email content: ${error}`, sessionId);
+    throw error;
+  }
+}
+
+async function getRandomPostcode() {
+  try {
+    const response = await axios.get('https://api.postcodes.io/random/postcodes');
+    return response.data.result.postcode;
+  } catch (error) {
+    await sendLog(`Error fetching postcode: ${error}`, sessionId);
+    throw error;
+  }
+}
+async function waitForPostcodeInput(driver) {
+  try {
+    await driver.wait(until.elementLocated(By.id('Postcode')), 15000);
+  } catch (error) {
+    await sendLog(`Error locating postcode input: ${error}`, sessionId);
+    throw error;
+  }
+}
 
 runRegistrationTest().catch(async (error) => {
   await sendLog(`Test failed: ${error.message}`, sessionId);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects</title>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+
 </head>
 <body>
     <div class="top-bar">
@@ -19,7 +19,6 @@
         <a id="logout-btn" href="/logout">Logout</a>
     </div>
     <div class="container">
-        <h1>Projects</h1>
         <ul class="project-list">
             <li><a href="/ciht">CIHT</a></li>
             <li><a href="/irm">IRM</a></li>
@@ -28,16 +27,6 @@
             <li><a href="/winepact">WINEPACT</a></li>
         </ul>
     </div>
-    <script>
-        // Fetch the user's email and update the span
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/user')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('user-email').textContent = data.username;
-                })
-                .catch(error => console.error('Error fetching user data:', error));
-        });
-    </script>
+    <script src="/scripts/userDisplay.js"></script>
 </body>
 </html>

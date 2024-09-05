@@ -1,0 +1,214 @@
+{
+  "id": "e441b968-9062-4600-b3ae-bf79d43b60f8",
+  "version": "2.0",
+  "name": "https://cihtwebqa.procloud.org.uk/",
+  "url": "https://cihtwebqa.procloud.org.uk",
+  "tests": [{
+    "id": "a4729c59-cf21-4e55-8b4e-d625578a76cb",
+    "name": "test",
+    "commands": [{
+      "id": "7ceeda72-5227-4e0c-8d4c-fe4eeefddaa8",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a6ecfd6d-eb4a-4926-a955-dd5bca734224",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1616x876",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "66db2aad-4e3d-4bdf-a4ab-73da8f3fe596",
+      "comment": "",
+      "command": "click",
+      "target": "css=.site-login > .zmdi",
+      "targets": [
+        ["css=.site-login > .zmdi", "css:finder"],
+        ["xpath=//div[@id='site-header-main']/div/div[3]/div/ul/li/a/i", "xpath:idRelative"],
+        ["xpath=//li/a/i", "xpath:position"],
+        ["xpath=//i[contains(.,'')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "63f577ba-cf60-4145-a8f6-3fed9d5e9940",
+      "comment": "",
+      "command": "type",
+      "target": "id=Username",
+      "targets": [
+        ["id=Username", "id"],
+        ["name=Username", "name"],
+        ["css=#Username", "css:finder"],
+        ["xpath=//input[@id='Username']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "ditati2050@iteradev.com"
+    }, {
+      "id": "1136100b-795e-4153-89db-6c978bba47f0",
+      "comment": "",
+      "command": "type",
+      "target": "id=Password",
+      "targets": [
+        ["id=Password", "id"],
+        ["name=Password", "name"],
+        ["css=#Password", "css:finder"],
+        ["xpath=//input[@id='Password']", "xpath:attributes"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "Test@123"
+    }, {
+      "id": "0e02b7ee-a311-495d-9c15-ebf2d90c925f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Register here",
+      "targets": [
+        ["linkText=Register here", "linkText"],
+        ["css=.form-group:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Register here')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'https://cihtwebqa.procloud.org.uk/register/basic')]", "xpath:href"],
+        ["xpath=//a", "xpath:position"],
+        ["xpath=//a[contains(.,'Register here')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5d86b863-b640-4f68-a17c-6d3ef9732cf9",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,400)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7646f743-543b-4a88-bdbe-18407463b9e0",
+      "comment": "",
+      "command": "type",
+      "target": "id=Email",
+      "targets": [
+        ["id=Email", "id"],
+        ["name=Email", "name"],
+        ["css=#Email", "css:finder"],
+        ["xpath=//input[@id='Email']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "CIHT"
+    }, {
+      "id": "a0ac8317-e63c-402e-8ab4-29f334d806bf",
+      "comment": "",
+      "command": "type",
+      "target": "id=Password",
+      "targets": [
+        ["id=Password", "id"],
+        ["name=Password", "name"],
+        ["css=#Password", "css:finder"],
+        ["xpath=//input[@id='Password']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div[2]/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "rAnTs2PGPe"
+    }, {
+      "id": "b642531d-9faf-4999-bcf4-ac2e99ea89e6",
+      "comment": "",
+      "command": "click",
+      "target": "id=Title",
+      "targets": [
+        ["id=Title", "id"],
+        ["name=Title", "name"],
+        ["css=#Title", "css:finder"],
+        ["xpath=//select[@id='Title']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"],
+        ["xpath=//select[contains(.,'Miss\nMr\nMrs\nMs\nDr\nBaroness\nBrig\nCapt\nChief Dr\nCllr\nCol\nDato\nDato Ir Dr\nDrIng\nEng\nEurDr\nEurIng\nEurIng Dr\nEurPf\nHajah\nHAJI\nHRH\nIng\nIr\nLtCol\nLtGen\nLtRe\nMaGen\nMajor\nMDM\nMx\nProfessor\nRev\nRevDr\nRt Hon Mrs\nRtHon\nSir\nSra\nSri\nSuperintendent\nSuptd\nTanSri\nTHE')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "40e9d711-0e62-4612-9e20-abfc81da0fbf",
+      "comment": "",
+      "command": "select",
+      "target": "id=Title",
+      "targets": [],
+      "value": "label=Mr"
+    }, {
+      "id": "c90fe758-8b3b-4146-969b-12e81c5f668e",
+      "comment": "",
+      "command": "click",
+      "target": "id=Firstname",
+      "targets": [
+        ["id=Firstname", "id"],
+        ["name=Firstname", "name"],
+        ["css=#Firstname", "css:finder"],
+        ["xpath=//input[@id='Firstname']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c6001cfa-5df5-4d9b-b6ad-e5a66097efa7",
+      "comment": "",
+      "command": "type",
+      "target": "id=Firstname",
+      "targets": [
+        ["id=Firstname", "id"],
+        ["name=Firstname", "name"],
+        ["css=#Firstname", "css:finder"],
+        ["xpath=//input[@id='Firstname']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/input", "xpath:position"]
+      ],
+      "value": "Giorgi"
+    }, {
+      "id": "75fbbccc-6396-401f-9cca-b754a3f58d76",
+      "comment": "",
+      "command": "click",
+      "target": "id=Lastname",
+      "targets": [
+        ["id=Lastname", "id"],
+        ["name=Lastname", "name"],
+        ["css=#Lastname", "css:finder"],
+        ["xpath=//input[@id='Lastname']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div[2]/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3d75deeb-7d4b-4f9b-828e-c68533aa8fdb",
+      "comment": "",
+      "command": "type",
+      "target": "id=Lastname",
+      "targets": [
+        ["id=Lastname", "id"],
+        ["name=Lastname", "name"],
+        ["css=#Lastname", "css:finder"],
+        ["xpath=//input[@id='Lastname']", "xpath:attributes"],
+        ["xpath=//form[@id='form236c4f8029314d7d98087c58a0f1af44']/div/div/div/div/div[2]/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "GhortlishviliTest"
+    }, {
+      "id": "4fb66b0b-fcbb-41ea-bd8c-24241d3607c6",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,443)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2bc2757f-e3ee-4a42-a4c9-f8db53cb51fd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,698)",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "2f196b7b-5696-49e2-877f-0c986d90f17f",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["a4729c59-cf21-4e55-8b4e-d625578a76cb"]
+  }],
+  "urls": ["https://cihtwebqa.procloud.org.uk/"],
+  "plugins": []
+}

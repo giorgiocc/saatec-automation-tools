@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const { runSeleniumTest } = require('./scripts/sideruner');
 
 // Middleware to check if user is authenticated
 function isAuthenticated(req, res, next) {
@@ -48,13 +49,15 @@ router.get('/ciht', isAuthenticated, addUserData, (req, res) => {
 });
 
 router.get('/registration_ciht', isAuthenticated, addUserData, (req, res) => {
-  const filePath = path.join(__dirname, 'views', 'ciht', 'registration_ciht.html');
+  res.sendFile(path.join(__dirname, 'views','ciht' ,'registration_ciht.html'));
 });
 
 
 router.get('/api/user', isAuthenticated, (req, res) => {
     res.json({ username: req.session.username });
 });
+
+
 
 
 module.exports = router;

@@ -9,6 +9,10 @@ install:
 	npm i sqlite
 	npm i bcryptjs 
 	npm i express-session
+	npm i selenium-side-runner
+	npm i chromedriver 
+	npm i uuid
+
 	@echo "Dependencies installed."
 
 run: install

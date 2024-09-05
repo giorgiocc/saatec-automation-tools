@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Managment</title>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="top-bar">
@@ -18,17 +17,21 @@
         <a href="/others">Others</a>
         <a id="logout-btn" href="/logout">Logout</a>
     </div>
-    <script>
-        // Fetch the user's email and update the span
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/user')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('user-email').textContent = data.username;
-                })
-                .catch(error => console.error('Error fetching user data:', error));
-        });
-    </script>
+    <div class="container">
+        <ul class="project-list">
+            <div  class="project-list-flex">
+            <li class="text">
+                <a>
+                    Update comments from Jira to TMS
+                </a>
+
+            </li>
+            <button class="start-btn" onclick="runTest()" >Start</button>
+            </div>
+        </ul>
+    </div>
+    <script src="/scripts/userDisplay.js"></script>
+    <script src="/scripts/jira-managment.js"></script>
 
 </body>
 </html>

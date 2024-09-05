@@ -133,9 +133,17 @@ button:hover {
     list-style-type: none;
     padding: 0;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 400px;
 }
-
+.project-list-flex {
+    display: flex;
+    flex-direction: row;
+}
+.spacer {
+    width: 10px;
+    height: 10px;
+    
+}
 .project-list li {
     background-color: #1f1f1f;
     margin: 10px 0;
@@ -297,3 +305,71 @@ button:hover {
     font-size: 16px;
     font-weight: bold;
 }
+     /* Button styles */
+     .test-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-left: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+.text {
+    color: #1eff00;
+}
+    .start-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-left: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .test-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* Spinner animation */
+    .spinner {
+        border-top: 4px solid white;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Success and failure states */
+    .success {
+        background-color: #28a745; /* Green */
+    }
+
+    .failure {
+        background-color: #dc3545; /* Red */
+    }
+
+    /* Container for the link and button */
+    .link-button-container {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 15px; /* Add spacing between list items */
+    }
+

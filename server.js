@@ -8,20 +8,18 @@ const bcrypt = require('bcryptjs');
 const { openDb, setup } = require('./db');
 const { v4: uuidv4 } = require('uuid');
 
-let sessionLogs = {}; // Use an object to store logs per session
+let sessionLogs = {}; 
 
-// Create the Express app
 const app = express();
 const port = process.env.PORT || 3001;
 
 let seleniumProcess = null;
 
-// Middleware setup
 app.use(session({
-  secret: 'your-secret-key', // Replace with a secure key
+  secret: 'your-secret-key', 
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Set to true if using HTTPS
+  cookie: { secure: false }
 }));
 
 app.use(cors());
@@ -29,15 +27,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 
-// Middleware to assign a session ID if not present
 app.use((req, res, next) => {
   if (!req.session.sessionId) {
-    req.session.sessionId = uuidv4(); // Generate a unique session ID
+    req.session.sessionId = uuidv4();
   }
   next();
 });
 
-// User registration route
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -55,7 +51,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// User login route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -74,7 +69,6 @@ app.post('/login', async (req, res) => {
   res.send('Logged in');
 });
 
-// Logout route
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).send('Error logging out');
@@ -82,10 +76,8 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// Use the routers for handling routes
 app.use('/', routers);
 
-// Log saving route
 app.post('/logs', (req, res) => {
   const { message, sessionId } = req.body;
   if (!message || !sessionId) {
@@ -100,7 +92,6 @@ app.post('/logs', (req, res) => {
   res.status(200).send('Log received');
 });
 
-// Fetch logs route
 app.get('/logs', (req, res) => {
   const sessionId = req.query.sessionId;
   if (!sessionId) {
@@ -111,7 +102,6 @@ app.get('/logs', (req, res) => {
   res.json({ logs });
 });
 
-// Clear logs route
 app.get('/clear-logs', (req, res) => {
   const { sessionId } = req.query;
   if (sessionId && sessionLogs[sessionId]) {
@@ -120,10 +110,9 @@ app.get('/clear-logs', (req, res) => {
   res.send('Logs cleared');
 });
 
-// Start Selenium test route
 app.get('/start', (req, res) => {
   if (!seleniumProcess) {
-    const sessionId = req.session.sessionId; // Get the session ID
+    const sessionId = req.session.sessionId; 
 
     seleniumProcess = spawn('node', [path.join(__dirname, 'selenium', 'projects', 'ciht', 'ciht-registration.js'), sessionId]);
 
@@ -152,12 +141,10 @@ app.get('/start', (req, res) => {
   }
 });
 
-// Fetch session ID route
 app.get('/session-id', (req, res) => {
   res.json({ sessionId: req.session.sessionId });
 });
 
-// Restart Selenium test route
 app.get('/restart', (req, res) => {
   if (seleniumProcess) {
     seleniumProcess.kill();
@@ -168,17 +155,14 @@ app.get('/restart', (req, res) => {
   }
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
 
-// Initialize the database
 setup().then(() => console.log('Database setup complete'));
 
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

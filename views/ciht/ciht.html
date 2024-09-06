@@ -17,22 +17,31 @@
         <a href="/others">Others</a>
         <a id="logout-btn" href="/logout">Logout</a>
     </div>
+
     <div class="container">
+        <div class="">
+            <button id="start-test-btn" class="test-btn" onclick="startSeleniumTest()">start .side file</button>
+        </div>
         <h1>CIHT - Automation Tools</h1>
+
         <ul class="project-list">
-                <ul class="link-button-container">
-                    <button onclick="startTests('1'); startTest()" >Registration</button>
-                    <a id="1" ></a>
-                    <div class="spacer">   </div>
-                        <a  href="/registration_ciht">SEE LOGS</a>
-
-                </ul>
-
+            <ul class="link-button-container">
+                <button onclick="startTests('1'); startTest()" >Registration</button>
+                <a id="1" ></a>
+                <div class="spacer"></div>
+                <a href="/registration_ciht">SEE LOGS</a>
+            </ul>
         </ul>
+
+        <!-- Add log-container here -->
+        <div id="log-container" class="log-container"></div> <!-- Logs will be displayed here -->
+
     </div>
+
     <script src="/scripts/ciht.js"></script>
     <script src="/scripts/spinner.js"></script>
     <script src="/scripts/userDisplay.js"></script>
+    <script src="/scripts/sideruner.js"></script>
 
 </body>
 </html>

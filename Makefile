@@ -14,7 +14,6 @@ install:
 	npm i uuid
 	npm i selenium-webdriver
 	npm update
-
 	@echo "Dependencies installed."
 
 run: install
@@ -24,4 +23,3 @@ run: install
 start:
 	@echo "Starting the server without installing dependencies..."
 	node server.js
-	@read

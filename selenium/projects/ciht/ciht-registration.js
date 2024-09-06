@@ -1,6 +1,7 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const axios = require('axios');
 const { faker } = require('@faker-js/faker');
+const sendLog = require('../../../scripts/sendLog');
 
 async function runRegistrationTest() {
   let driver = await new Builder()
@@ -125,17 +126,6 @@ function generatePassword(minLength = 8, maxLength = 100) {
   return password.sort(() => Math.random() - 0.5).join('');
 }
 
-async function sendLog(message, sessionId) {
-  try {
-    if (!message || !sessionId) {
-      throw new Error('Log message and session ID required');
-    }
-
-    await axios.post('http://localhost:3001/logs', { message, sessionId });
-  } catch (error) {
-    console.error('Error sending log:', error.response ? error.response.data : error.message);
-  }
-}
 
 
 async function getTempEmail() {

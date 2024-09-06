@@ -1,3 +1,5 @@
+
+
 function startSeleniumTest() {
     fetch('/start-selenium-test')
       .then(response => response.text())

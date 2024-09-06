@@ -6,7 +6,8 @@ const routers = require('./routers');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const { openDb, setup } = require('./db');
-const { v4: uuidv4 } = require('uuid');
+const generateSessionId = require('./scripts/sessionId');  // Import session ID generator
+const sendLog = require('./scripts/sendLog');
 
 let sessionLogs = {}; 
 
@@ -32,7 +33,7 @@ app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 
 app.use((req, res, next) => {
   if (!req.session.sessionId) {
-    req.session.sessionId = uuidv4();
+    req.session.sessionId = generateSessionId();  // Use imported function
   }
   next();
 });
@@ -202,6 +203,7 @@ app.get('/start-selenium-test', (req, res) => {
 
   if (!res.headersSent) {
     res.send('Selenium test started');
+
   }
 });
 

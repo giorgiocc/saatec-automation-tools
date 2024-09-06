@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const { runSeleniumTest } = require('./scripts/sideruner');
 
 
 function isAuthenticated(req, res, next) {

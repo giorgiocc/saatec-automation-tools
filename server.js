@@ -15,6 +15,9 @@ const port = process.env.PORT || 3001;
 
 let seleniumProcess = null;
 
+// Absolute path to npx
+const npxPath = path.join(__dirname, 'node_modules', '.bin', 'npx');
+
 app.use(session({
   secret: 'your-secret-key', 
   resave: false,
@@ -161,6 +164,46 @@ app.use((err, req, res, next) => {
 });
 
 setup().then(() => console.log('Database setup complete'));
+
+app.get('/start-selenium-test', (req, res) => {
+  if (seleniumProcess) {
+    return res.send('Selenium test is already running');
+  }
+
+  const sessionId = req.session.sessionId;
+
+  seleniumProcess = spawn('npx', ['selenium-side-runner', '--output-directory=./output', 'selenium/projects/ciht/ciht-registration.side'], {
+    shell: true
+  });
+
+  seleniumProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  seleniumProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  seleniumProcess.on('close', (code) => {
+    console.log(`process exited with code: ${code}`);
+    seleniumProcess = null;
+    if (!res.headersSent) {
+      res.send('Selenium test finished');
+    }
+  });
+
+  seleniumProcess.on('error', (err) => {
+    console.error(`Error starting Selenium process: ${err.message}`);
+    seleniumProcess = null;
+    if (!res.headersSent) {
+      res.status(500).send('Error starting Selenium test');
+    }
+  });
+
+  if (!res.headersSent) {
+    res.send('Selenium test started');
+  }
+});
 
 
 app.listen(port, () => {

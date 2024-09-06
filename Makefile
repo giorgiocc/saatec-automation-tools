@@ -1,4 +1,4 @@
-.PHONY: install run
+.PHONY: install run start
 
 install:
 	@echo "Installing dependencies..."
@@ -12,9 +12,16 @@ install:
 	npm i selenium-side-runner
 	npm i chromedriver 
 	npm i uuid
+	npm i selenium-webdriver
+	npm update
 
 	@echo "Dependencies installed."
 
 run: install
 	@echo "Starting the server..."
 	node server.js
+
+start:
+	@echo "Starting the server without installing dependencies..."
+	node server.js
+	@read

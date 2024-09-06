@@ -38,7 +38,6 @@ if "%1" NEQ "restarted" (
     exit /b
 )
 
-start http://localhost:3001/
 
 echo Executing server...
 make run

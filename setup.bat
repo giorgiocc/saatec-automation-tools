@@ -32,17 +32,17 @@ if "%1" NEQ "restarted" (
 )
 
 
-if not exist "%DesktopPath%\saatec-automation" (
-    echo Cloning the Saatec-automation repository to the Desktop...
-    git clone https://github.com/giorgiocc/saatec-automation.git "%DesktopPath%\saatec-automation"
+if not exist "%DesktopPath%\saatec-automation-tools" (
+    echo Cloning the saatec-automation-tools repository to the Desktop...
+    git clone https://github.com/giorgiocc/saatec-automation-tools.git "%DesktopPath%\saatec-automation-tools"
 ) else (
     echo Repository already cloned on the Desktop. Skipping cloning.
 )
 
-cd /d "%DesktopPath%\saatec-automation"
+cd /d "%DesktopPath%\saatec-automation-tools"
 
 if not exist "start-server.bat" (
-    echo start-server.bat not found in the Saatec-automation directory. Exiting...
+    echo start-server.bat not found in the saatec-automation-tools directory. Exiting...
 )
 
 powershell -Command "Start-Process '%cd%\start-server.bat'"

@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 
-// Function to open the database
 async function openDb() {
   return open({
     filename: './database.db',
@@ -9,7 +8,6 @@ async function openDb() {
   });
 }
 
-// Function to setup the database
 async function setup() {
   const db = await openDb();
   await db.exec(`
@@ -21,5 +19,4 @@ async function setup() {
   `);
 }
 
-// Export functions
 module.exports = { openDb, setup };

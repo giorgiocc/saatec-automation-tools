@@ -11,13 +11,13 @@ document.getElementById('register-form').onsubmit = async (e) => {
 
     const messageDiv = document.getElementById('register-message');
     if (response.ok) {
-        messageDiv.textContent = 'Registration successful';
-        messageDiv.style.color = 'green';
+        messageDiv.textContent = 'Registration disabled - redirecting to login';
+        messageDiv.style.color = 'red';
         setTimeout(() => {
             window.location.href = '/login';
-        }, 1000); // Redirect after 1.5 seconds
+        }, 1000); 
     } else {
-        messageDiv.textContent = 'Registration failed. Please try again.';
+        messageDiv.textContent = 'Registration disabled - redirecting to login';
         messageDiv.style.color = 'red';
     }
 };

@@ -38,21 +38,25 @@ app.use((req, res, next) => {
   next();
 });
 
+// app.post('/register', async (req, res) => {
+//   const { username, password } = req.body;
+//   if (!username || !password) {
+//     return res.status(400).send('Username and password required');
+//   }
+
+//   const hashedPassword = await bcrypt.hash(password, 10);
+//   const db = await openDb();
+
+//   try {
+//     await db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
+//     res.status(201).send('User registered');
+//   } catch (err) {
+//     res.status(400).send('Username already exists');
+//   }
+// });
+
 app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return res.status(400).send('Username and password required');
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const db = await openDb();
-
-  try {
-    await db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
-    res.status(201).send('User registered');
-  } catch (err) {
-    res.status(400).send('Username already exists');
-  }
+  return res.status(100).send('Registration is disabled');
 });
 
 app.post('/login', async (req, res) => {

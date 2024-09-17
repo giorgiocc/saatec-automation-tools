@@ -149,6 +149,39 @@ app.get('/start', (req, res) => {
   }
 });
 
+app.get('/startGaftaJoining', (req, res) => {
+  if (!seleniumProcess) {
+    const sessionId = req.session.sessionId; 
+
+    seleniumProcess = spawn('node', [path.join(__dirname, 'selenium', 'projects', 'gafta', 'gafta-joining.js'), sessionId]);
+
+    seleniumProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    seleniumProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    seleniumProcess.on('close', (code) => {
+      console.log(`process exited with code: ${code}`);
+      seleniumProcess = null;
+    });
+
+    seleniumProcess.on('error', (err) => {
+      console.error(`Error starting Selenium process: ${err.message}`);
+      seleniumProcess = null;
+      res.status(500).send('Error starting Selenium test');
+    });
+
+    res.send('Test started');
+  } else {
+    res.send('Test is already running');
+  }
+});
+
+
+
 app.get('/session-id', (req, res) => {
   res.json({ sessionId: req.session.sessionId });
 });

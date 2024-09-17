@@ -47,6 +47,9 @@ router.get('/ciht', isAuthenticated, addUserData, (req, res) => {
 router.get('/registration_ciht', isAuthenticated, addUserData, (req, res) => {
   res.sendFile(path.join(__dirname, 'views','ciht' ,'registration_ciht.html'));
 });
+router.get('/gafta', isAuthenticated, addUserData, (req, res) => {
+  res.sendFile(path.join(__dirname, 'views','gafta' ,'gafta.html'));
+});
 
 
 router.get('/api/user', isAuthenticated, (req, res) => {

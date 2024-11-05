@@ -93,7 +93,7 @@ async function runGAFTARegistrationTest() {
   } catch (err) {
     console.error('Error during form submission:', err);
   } finally {
-    await sendLog('Test completed', sessionId);
+    await sendLog('Gafta test finished, check results', sessionId);
   }
 }
 

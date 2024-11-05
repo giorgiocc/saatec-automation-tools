@@ -97,7 +97,7 @@ async function runRegistrationTest() {
   } catch (err) {
     console.error('Error during form submission:', err);
   } finally {
-    await sendLog('Test completed', sessionId);
+    await sendLog('CIHT test finished, check results', sessionId);
   }
 }
 
